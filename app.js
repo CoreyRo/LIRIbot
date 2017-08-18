@@ -1,7 +1,8 @@
 var app={
 	task: process.argv[2],
 	a: process.argv[3],
-	b: process.argv[4]
+	b: process.argv[4],
+	all: process.argv
 
 }
 
@@ -15,7 +16,7 @@ switch(app.task){
 	;
 	break;
 	case "movie-this":
-
+	omdbCall(app.a,app.b,app.all)
 	;
 	break;
 	case "do-what-it-says":
@@ -60,10 +61,29 @@ function twitterCall(a,b){
 	});
 }
 
-function omdbCall(a,b){
+function omdbCall(a,b, all){
 	var request = require("request");
-	var movieName = process.argv[2];
-	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+	var movieName = [];
+	var movieNameLong = [];
+	console.log(all.length)
+	if(all.length === 4){
+		movieName = all[3].toLowerCase();
+		console.log("Single Word Title: " + true);
+	}
+	else{
+		for (var i = 3; i < all.length; i++) {
+			
+			movieNameLong.push(all[i]);
+			
+		}
+		
+		var movieName = movieNameLong.toString().replace(/,/g , "+").toLowerCase();
+		
+		
+	}	
+	var movieTitle = movieName.replace(/\+/g,' ').toUpperCase();
+	console.log("Movie Name: " + movieTitle)
+	var queryUrl = "http://www.omdbapi.com/?t=" + a + "&y=&plot=short&apikey=40e9cece";
 	request(queryUrl, function(error, response, body) {
 
 	  if (!error && response.statusCode === 200) {
