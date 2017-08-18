@@ -30,7 +30,7 @@ switch(app.task){
 
 function twitterCall(a,b){
 	var Twitter = require('twitter');
-	 
+	var inc = 1
 	var client = new Twitter({
 	  consumer_key: "5UnjRgblnzgIfGcW66Vf9ClvC",
 	  consumer_secret: "X3D3jpRqQlQXgLkPeWf9NozPPusiKQxFXb2HwmMOCOegOfLxGs",
@@ -39,15 +39,24 @@ function twitterCall(a,b){
 	});
 	
 	var params = {screen_name: a,
-				  count: "1"
+				  count: "10"
 
 	};
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 	  if (error) {
 	    return console.log(error);
 	  }
-	  console.log(tweets[0].text);
-	  // console.log(response);
+	  for (var i = tweets.length - 1; i >= 0; i--) {
+	  	console.log("Tweet Number: " + inc);
+	  	console.log("==================================================");
+	  	console.log("@" + tweets[i].user.screen_name);
+	  	console.log(tweets[i].text);
+	  	console.log("==================================================");
+	  	console.log(" ");
+	  	inc ++;
+	  }
+
+	 
 	});
 }
 
