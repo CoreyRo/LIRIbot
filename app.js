@@ -33,10 +33,10 @@ function twitterCall(a,b){
 	var Twitter = require('twitter');
 	var inc = 1
 	var client = new Twitter({
-	  consumer_key: "5UnjRgblnzgIfGcW66Vf9ClvC",
-	  consumer_secret: "X3D3jpRqQlQXgLkPeWf9NozPPusiKQxFXb2HwmMOCOegOfLxGs",
-	  access_token_key: "898352648578977793-OVmlyZmMOJGdLsP0E7r6gSRN8si389p",
-	  access_token_secret: "h3jnBzXx1alNv3iaKNlxsVKDQ0AKiPAqBsJuKmLY6uH0B"
+	  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+	  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+	  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+	  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 	});
 	
 	var params = {screen_name: a,
@@ -65,10 +65,8 @@ function omdbCall(a,b, all){
 	var request = require("request");
 	var movieName = [];
 	var movieNameLong = [];
-	console.log(all.length)
 	if(all.length === 4){
 		movieName = all[3].toLowerCase();
-		console.log("Single Word Title: " + true);
 	}
 	else{
 		for (var i = 3; i < all.length; i++) {
@@ -78,16 +76,31 @@ function omdbCall(a,b, all){
 		}
 		
 		var movieName = movieNameLong.toString().replace(/,/g , "+").toLowerCase();
-		
-		
 	}	
-	var movieTitle = movieName.replace(/\+/g,' ').toUpperCase();
-	console.log("Movie Name: " + movieTitle)
-	var queryUrl = "http://www.omdbapi.com/?t=" + a + "&y=&plot=short&apikey=40e9cece";
+	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 	request(queryUrl, function(error, response, body) {
 
 	  if (!error && response.statusCode === 200) {
-	    console.log("Release Year: " + JSON.parse(body).Year);
+	  	console.log("__________________________________________________");
+	  	console.log("Title: " + JSON.parse(body).Title);
+	  	console.log(" ");
+	  	console.log("Rated: " + JSON.parse(body).Rated);
+	  	console.log("Runtime: " + JSON.parse(body).Runtime);
+	  	console.log("Release Year: " + JSON.parse(body).Year);
+	   	console.log("==================================================");
+	   	console.log("Director: " + JSON.parse(body).Director);
+	   	console.log("Writers: " + JSON.parse(body).Writer);
+   		console.log("Cast: " + JSON.parse(body).Actors);
+	  	console.log(" ");
+	  	console.log("Plot: " + JSON.parse(body).Plot);
+	  	console.log(" ");
+	  	console.log("**********************Ratings!********************");
+	  	for (var i = 0; i < JSON.parse(body).Ratings.length; i++) {
+	  		console.log(JSON.parse(body).Ratings[i].Source);
+	  		console.log(JSON.parse(body).Ratings[i].Value);
+	  	}
+
+	    
 	  }
 	});
 }
@@ -96,4 +109,9 @@ function test(task,a,b){
 	console.log(task);
 	console.log(a);
 	console.log(b);
+	console.log("process.env.TWITTER_CONSUMER_KEY " + process.env.TWITTER_CONSUMER_KEY);
+	console.log("process.env.TWITTER_CONSUMER_SECRET " + process.env.TWITTER_CONSUMER_SECRET);
+	console.log("process.env.TWITTER_ACCESS_TOKEN_KEY " + process.env.TWITTER_ACCESS_TOKEN_KEY);
+	console.log("process.env.TWITTER_ACCESS_TOKEN_SECRET " + process.env.TWITTER_ACCESS_TOKEN_SECRET);
+
 }
