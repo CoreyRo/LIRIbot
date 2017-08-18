@@ -40,7 +40,7 @@ function twitterCall(a,b){
 	});
 	
 	var params = {screen_name: a,
-				  count: "10"
+				  count: "20"
 
 	};
 	client.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -65,7 +65,10 @@ function omdbCall(a,b, all){
 	var request = require("request");
 	var movieName = [];
 	var movieNameLong = [];
-	if(all.length === 4){
+	if(!all[3]){
+		movieName = "Mr+Nobody";
+	}
+	else if(all.length === 4){
 		movieName = all[3].toLowerCase();
 	}
 	else{
