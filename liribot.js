@@ -73,24 +73,36 @@ function omdbCall(a, all) {
 	request(queryUrl, function (error, response, body) {
 		if (!error && response.statusCode === 200) {
 			//OMDB OUTPUT 
-			console.log("__________________________________________________");
-			console.log("Title: " + JSON.parse(body).Title);
-			console.log(" ");
-			console.log("Rated: " + JSON.parse(body).Rated);
-			console.log("Runtime: " + JSON.parse(body).Runtime);
-			console.log("Release Year: " + JSON.parse(body).Year);
-			console.log("==================================================");
-			console.log("Director: " + JSON.parse(body).Director);
-			console.log("Writers: " + JSON.parse(body).Writer);
-			console.log("Cast: " + JSON.parse(body).Actors);
-			console.log(" ");
-			console.log("Plot: " + JSON.parse(body).Plot);
-			console.log(" ");
-			console.log("**********************Ratings!********************");
-			for (var i = 0; i < JSON.parse(body).Ratings.length; i++) {
-				console.log(JSON.parse(body).Ratings[i].Source);
-				console.log(JSON.parse(body).Ratings[i].Value);
+			if(!body.Response){
+				return console.log("Error: " + JSON.parse(body).Error);
 			}
+			else{
+				console.log("__________________________________________________");
+				console.log("Title: " + JSON.parse(body).Title);
+				console.log(" ");
+				console.log("Rated: " + JSON.parse(body).Rated);
+				console.log("Runtime: " + JSON.parse(body).Runtime);
+				console.log("Release Year: " + JSON.parse(body).Year);
+				console.log("==================================================");
+				console.log("Director: " + JSON.parse(body).Director);
+				console.log("Writers: " + JSON.parse(body).Writer);
+				console.log("Cast: " + JSON.parse(body).Actors);
+				console.log(" ");
+				console.log("Plot: " + JSON.parse(body).Plot);
+				console.log(" ");
+				console.log("**********************Ratings!********************");
+				console.log(JSON.parse(body).Ratings.length)
+				if(JSON.parse(body).Ratings.length > 0){
+					for (var i = 0; i < JSON.parse(body).Ratings.length; i++) {
+						console.log(JSON.parse(body).Ratings[i].Source);
+						console.log(JSON.parse(body).Ratings[i].Value);
+					}
+				}
+				else{
+					console.log(JSON.parse(body).imdbRating);
+				}
+			}
+			
 		}
 	});
 }
