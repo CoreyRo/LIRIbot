@@ -5,13 +5,13 @@ var app = {
 }
 switch (app.task) {
 case "my-tweets":
-	twitterCall(app.a);
+	twitterCall(app.task, app.a);
 	break;
 case "spotify-this-song":
 	;
 	break;
 case "movie-this":
-	omdbCall(app.a, app.all);
+	omdbCall(app.task, app.a, app.all);
 	break;
 case "do-what-it-says":
 	;
@@ -21,7 +21,8 @@ case "test":
 	break;
 }
 
-function twitterCall(a) {
+function twitterCall(task, a) {
+	logInputs(task, a);
 	var Twitter = require('twitter');
 	var inc = 1
 	var client = new Twitter({
@@ -50,7 +51,7 @@ function twitterCall(a) {
 	});
 }
 //OMDB Function
-function omdbCall(a, all) {
+function omdbCall(task,a,all) {
 	var request = require("request");
 	var movieName = [];
 	var movieNameLong = [];
@@ -69,11 +70,12 @@ function omdbCall(a, all) {
 		}
 		var movieName = movieNameLong.toString().replace(/,/g, "+").toLowerCase();
 	}
+	logInputs(task, movieName.replace(/\+/g,' '));
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 	request(queryUrl, function (error, response, body) {
 		if (!error && response.statusCode === 200) {
 			//OMDB OUTPUT 
-			if(!body.Response){
+			if(JSON.parse(body).Response === "false"){
 				return console.log("Error: " + JSON.parse(body).Error);
 			}
 			else{
@@ -106,6 +108,17 @@ function omdbCall(a, all) {
 		}
 	});
 }
+function logInputs(task,value){
+	var fs = require("fs");
+	fs.appendFile("random.txt", task + ", " + '"' + value + '"' + "; ", function(err) {
+		if(err){
+			return console.log(err);
+		}
+	console.log("random.txt was updated!");
+
+	});
+}
+
 
 //test function, to make sure nodejs, js, and keys are working
 function test(task) {
