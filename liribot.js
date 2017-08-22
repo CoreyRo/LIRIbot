@@ -208,6 +208,7 @@ var app = {
 		console.log("process.env.TWITTER_ACCESS_TOKEN_KEY " + process.env.TWITTER_ACCESS_TOKEN_KEY);
 		console.log("process.env.TWITTER_ACCESS_TOKEN_SECRET " + process.env.TWITTER_ACCESS_TOKEN_SECRET);
 	},
+	//checks the argv2 or the txt for the task
 	switching: function(task, a, all, spotify, twitter, movie, read){
 			switch (task) {
 		case "my-tweets":
@@ -227,8 +228,10 @@ var app = {
 			break;
 		}
 	},
+	//runs switch
 	main:function(){
 		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt)
 	},
 }
+//runs the code
 app.main();
