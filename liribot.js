@@ -149,7 +149,7 @@ var app = {
 			pickedArr.push(pickedSplit[0]);
 			pickedArr.push(pickedSplit[1]);
 			console.log(pickedArr);
-			switching(pickedArr[2], pickedArr[3], pickedArr, app.getSpot, app.getTwit, app.getMovie);
+			app.switching(pickedArr[2], pickedArr[3], pickedArr, app.getSpot, app.getTwit, app.getMovie);
 			console.log(" ");
 			console.log("===================RANDOM=PICK====================");
 			console.log("TASK: " + pickedArr[2]);
@@ -207,26 +207,28 @@ var app = {
 		console.log("process.env.TWITTER_CONSUMER_SECRET " + process.env.TWITTER_CONSUMER_SECRET);
 		console.log("process.env.TWITTER_ACCESS_TOKEN_KEY " + process.env.TWITTER_ACCESS_TOKEN_KEY);
 		console.log("process.env.TWITTER_ACCESS_TOKEN_SECRET " + process.env.TWITTER_ACCESS_TOKEN_SECRET);
-	}
+	},
+	switching: function(task, a, all, spotify, twitter, movie, read){
+			switch (task) {
+		case "my-tweets":
+			twitter(task, a);
+			break;
+		case "spotify-this-song":
+			spotify(task, a, all);
+			break;
+		case "movie-this":
+			movie(task, a, all);
+			break;
+		case "do-what-it-says":
+			read(task, a, all);;
+			break;
+		case "test":
+			test(task);
+			break;
+		}
+	},
+	main:function(){
+		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt)
+	},
 }
-switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt)
-//Runs the function assigned to the string
-function switching(task, a, all, spotify, twitter, movie, read) {
-	switch (task) {
-	case "my-tweets":
-		twitter(task, a);
-		break;
-	case "spotify-this-song":
-		spotify(task, a, all);
-		break;
-	case "movie-this":
-		movie(task, a, all);
-		break;
-	case "do-what-it-says":
-		read(task, a, all);;
-		break;
-	case "test":
-		test(task);
-		break;
-	}
-}
+app.main();
