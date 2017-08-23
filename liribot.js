@@ -9,7 +9,7 @@ var app = {
 	a: process.argv[3],
 	all: process.argv,
 	//Spotify Function
-	getSpot: function (task, a, all) {
+	getSpot: function(task, a, all) {
 		var Spotify = require('node-spotify-api');
 		var name = "";
 		var incr = 1;
@@ -28,7 +28,7 @@ var app = {
 		spotify.search({
 			type: 'track',
 			query: '"' + name + '"'
-		}, function (err, data) {
+		}, function(err, data) {
 			if (err) {
 				return console.log('Error occurred: ' + err);
 			}
@@ -46,7 +46,7 @@ var app = {
 			app.logOutputs(data.items);
 		});
 	},
-	getTwit: function (task, a, all) {
+	getTwit: function(task, a, all) {
 		if (a === "" || a === 'undefined') {
 			a = "cro____";
 		}
@@ -63,7 +63,7 @@ var app = {
 				screen_name: a,
 				count: "20"
 			};
-			client.get('statuses/user_timeline', params, function (error, tweets, response) {
+			client.get('statuses/user_timeline', params, function(error, tweets, response) {
 				if (error) {
 					return console.log(error);
 				}
@@ -81,7 +81,7 @@ var app = {
 		}
 		app.logInputs(task, a);
 	},
-	getMovie: function (task, a, all) {
+	getMovie: function(task, a, all) {
 		var request = require("request");
 		var name = "";
 		app.makeName(a, all);
@@ -93,7 +93,7 @@ var app = {
 			name = app.getName();
 		}
 		var queryUrl = "http://www.omdbapi.com/?t=" + name + "&y=&plot=short&apikey=40e9cece";
-		request(queryUrl, function (error, response, body) {
+		request(queryUrl, function(error, response, body) {
 			if (!error && response.statusCode === 200) {
 				//OMDB OUTPUT 
 				if (JSON.parse(body).Response === "false") {
@@ -130,10 +130,10 @@ var app = {
 		});
 	},
 	//reads txt file, picks random task/search and runs it
-	readTxt: function () {
+	readTxt: function() {
 		var fs = require("fs");
 		var incr = 0;
-		fs.readFile("random.txt", "utf8", function (err, data) {
+		fs.readFile("random.txt", "utf8", function(err, data) {
 			if (err) {
 				return console.log(err);
 			}
@@ -161,7 +161,7 @@ var app = {
 		});
 	},
 	//makes names out of argv array for music/movies
-	makeName: function (a, all) {
+	makeName: function(a, all) {
 		var endName = [];
 		var NameLong = [];
 		if (!all[3] || all[3] === 'undefined') {
@@ -176,14 +176,14 @@ var app = {
 			}
 			var endName = NameLong.toString().replace(/,/g, "+").toLowerCase();
 		}
-		this.getName = function () {
+		this.getName = function() {
 			return endName;
 		}
 	},
 	//logs user inputs
-	logInputs: function (task, value) {
+	logInputs: function(task, value) {
 		var fs = require("fs");
-		fs.appendFile("random.txt", task + "," + value + ";", function (err) {
+		fs.appendFile("random.txt", task + "," + value + ";", function(err) {
 			if (err) {
 				return console.log(err);
 			}
@@ -191,9 +191,9 @@ var app = {
 		});
 	},
 	//logs response outputs
-	logOutputs: function (response) {
+	logOutputs: function(response) {
 		var fs = require("fs");
-		fs.appendFile("log.txt", "<START>" + JSON.stringify(response) + "<END>", function (err) {
+		fs.appendFile("log.txt", "<START>" + JSON.stringify(response) + "<END>", function(err) {
 			if (err) {
 				return console.log(err);
 			}
@@ -201,7 +201,7 @@ var app = {
 		});
 	},
 	//tests keys
-	testFunc: function (task) {
+	testFunc: function(task) {
 		console.log("======================" + task.toUpperCase() + "======================");
 		console.log("process.env.TWITTER_CONSUMER_KEY " + process.env.TWITTER_CONSUMER_KEY);
 		console.log("process.env.TWITTER_CONSUMER_SECRET " + process.env.TWITTER_CONSUMER_SECRET);
@@ -209,29 +209,60 @@ var app = {
 		console.log("process.env.TWITTER_ACCESS_TOKEN_SECRET " + process.env.TWITTER_ACCESS_TOKEN_SECRET);
 	},
 	//checks the argv2 or the txt for the task
-	switching: function(task, a, all, spotify, twitter, movie, read){
-			switch (task) {
-		case "my-tweets":
-			twitter(task, a);
-			break;
-		case "spotify-this-song":
-			spotify(task, a, all);
-			break;
-		case "movie-this":
-			movie(task, a, all);
-			break;
-		case "do-what-it-says":
-			read(task, a, all);;
-			break;
-		case "test":
-			test(task);
+	switching: function(task, a, all, spotify, twitter, movie, read, reset) {
+		switch (task) {
+			case "my-tweets":
+				twitter(task, a);
+				break;
+			case "spotify-this-song":
+				spotify(task, a, all);
+				break;
+			case "movie-this":
+				movie(task, a, all);
+				break;
+			case "do-what-it-says":
+				read(task, a, all);;
+				break;
+			case "test":
+				test(task);
+				break;
+			case "reset":
+				reset();
 			break;
 		}
 	},
 	//runs switch
-	main:function(){
-		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt)
+	main: function() {
+		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt, app.reset)
 	},
+	reset: function() {
+		console.log("============WARNING!==============================")
+		console.log("=====================WARNING!=====================")
+		console.log("==============================WARNING!============")
+		var inquirer = require("inquirer");
+		// Create a "Prompt" with a series of questions.
+		inquirer
+			.prompt([{
+				type: "confirm",
+				message: "This will reset the Random.txt file! Are you sure?:",
+				name: "confirm",
+				default: true
+			}])
+			.then(function(inquirerResponse) {
+				if (inquirerResponse.confirm) {
+					var fs = require("fs");
+					fs.writeFile("log.txt", "spotify-this-song,I Want it That Way;", function(err) {
+						if (err) {
+							return console.log(err);
+						}
+						console.log("Random.txt was reset!");
+					});
+				}
+				else {
+					console.log("Random.txt reset aborted!");
+				}
+			});
+	}
 }
 //runs the code
 app.main();
