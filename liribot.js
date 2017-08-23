@@ -235,12 +235,12 @@ var app = {
 	main: function() {
 		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt, app.reset)
 	},
+	//resets the random.txt file that holds all inputs
 	reset: function() {
 		console.log("============WARNING!==============================")
 		console.log("=====================WARNING!=====================")
 		console.log("==============================WARNING!============")
 		var inquirer = require("inquirer");
-		// Create a "Prompt" with a series of questions.
 		inquirer
 			.prompt([{
 				type: "confirm",
