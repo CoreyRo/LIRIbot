@@ -2,6 +2,8 @@
 //LIRIBOT
 //Lifelike specific data collector.
 //Basically Skynet
+//Type 'node liribot.js info' in the terminal for a list of commands
+//
 //By Corey Rodems
 //**************************************************
 var app = {
@@ -209,7 +211,7 @@ var app = {
 		console.log("process.env.TWITTER_ACCESS_TOKEN_SECRET " + process.env.TWITTER_ACCESS_TOKEN_SECRET);
 	},
 	//checks the argv2 or the txt for the task
-	switching: function(task, a, all, spotify, twitter, movie, read, reset) {
+	switching: function(task, a, all, spotify, twitter, movie, read, reset, info) {
 		switch (task) {
 			case "my-tweets":
 				twitter(task, a);
@@ -229,11 +231,14 @@ var app = {
 			case "reset":
 				reset();
 			break;
+			case "info":
+				info();
+			break;
 		}
 	},
 	//runs switch
 	main: function() {
-		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt, app.reset)
+		app.switching(app.task, app.a, app.all, app.getSpot, app.getTwit, app.getMovie, app.readTxt, app.reset, app.info)
 	},
 	//resets the random.txt file that holds all inputs
 	reset: function() {
@@ -251,7 +256,7 @@ var app = {
 			.then(function(inquirerResponse) {
 				if (inquirerResponse.confirm) {
 					var fs = require("fs");
-					fs.writeFile("log.txt", "spotify-this-song,I Want it That Way;", function(err) {
+					fs.writeFile("random.txt", "spotify-this-song,I Want it That Way;", function(err) {
 						if (err) {
 							return console.log(err);
 						}
@@ -262,6 +267,29 @@ var app = {
 					console.log("Random.txt reset aborted!");
 				}
 			});
+	},
+	info: function(){
+		console.log("======================INFO========================")
+		console.log("The commands are:");
+		console.log(" ");
+		console.log("my-tweets");
+		console.log("'my-tweets unsername' will bring back a list of recent tweets for that user");
+		console.log(" ");
+		console.log("movie-this");
+		console.log("'movie-this move name' will bring back info for that movie");
+		console.log(" ");
+		console.log("spotify-this-song");
+		console.log("'spotify-this-song song name' will bring back a list of songs with that name and similar names");
+		console.log(" ");
+		console.log("do-what-it-says");
+		console.log("'do-what-it-says' will pick a random action from the history log");
+		console.log(" ");
+		console.log("reset");
+		console.log("'reset' will reset the history log");
+		console.log(" ");
+		console.log("test");
+		console.log("'test' will test your process.env keys");
+
 	}
 }
 //runs the code
