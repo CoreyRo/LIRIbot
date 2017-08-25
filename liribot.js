@@ -89,13 +89,14 @@ var app = {
 		var request = require("request");
 		var name = "";
 		app.makeName(a, all);
-		app.logInputs(task, app.getName().replace(/\+/g, ' '));
+		
 		if (app.getName() === "noname") {
 			name = "Mr+Nobody";
 		}
 		else {
 			name = app.getName();
 		}
+		
 		var queryUrl = "http://www.omdbapi.com/?t=" + name + "&y=&plot=short&apikey=40e9cece";
 		request(queryUrl, function(error, response, body) {
 			if (!error && response.statusCode === 200) {
@@ -103,8 +104,9 @@ var app = {
 				if (JSON.parse(body).Response === "false") {
 					return console.log("Error: " + JSON.parse(body).Error);
 				}
-				else {
+				else if(!JSON.parse(body).Response === "false") {
 					app.logOutputs(response);
+					app.logInputs(task, app.getName().replace(/\+/g, ' '));
 					console.log("__________________________________________________");
 					console.log("Title: " + JSON.parse(body).Title);
 					console.log(" ");
@@ -130,6 +132,9 @@ var app = {
 					else {
 						console.log(JSON.parse(body).imdbRating);
 					}
+				}
+				else{
+					console.log(JSON.parse(body).Error + "\n" + name);
 				}
 			}
 		});
