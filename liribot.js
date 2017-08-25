@@ -101,10 +101,10 @@ var app = {
 		request(queryUrl, function(error, response, body) {
 			if (!error && response.statusCode === 200) {
 				//OMDB OUTPUT 
-				if (JSON.parse(body).Response === "false") {
-					return console.log("Error: " + JSON.parse(body).Error);
+				if (JSON.parse(body).Response === "False") {
+					return console.log("Error: " + JSON.parse(body).Error + "\n" + name);
 				}
-				else if(!JSON.parse(body).Response === "false") {
+				else{
 					app.logOutputs(response);
 					app.logInputs(task, app.getName().replace(/\+/g, ' '));
 					console.log("__________________________________________________");
@@ -132,9 +132,6 @@ var app = {
 					else {
 						console.log(JSON.parse(body).imdbRating);
 					}
-				}
-				else{
-					console.log(JSON.parse(body).Error + "\n" + name);
 				}
 			}
 		});
