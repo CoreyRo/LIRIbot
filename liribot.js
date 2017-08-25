@@ -35,11 +35,12 @@ var app = {
 				return console.log('Error occurred: ' + err);
 			}
 			for (var i = 0; i < 10; i++) {
-				console.log("Resonse Number: " + incr);
-				console.log("SEARCHED SONG: " + name);
+				console.log("Response Number: " + incr);
+				console.log("SEARCHED SONG: " + name.toUpperCase());
 				console.log("==================================================");
 				console.log("ARTIST: " + data.tracks.items[i].artists[0].name);
 				console.log("SONG NAME: " + data.tracks.items[i].name);
+				console.log("ALBUM NAME: " + data.tracks.items[i].album.name);
 				console.log("PREVIEW LINK" + data.tracks.items[i].preview_url);
 				console.log("==================================================");
 				console.log(" ");
@@ -70,13 +71,14 @@ var app = {
 					return console.log(error);
 				}
 				for (var i = tweets.length - 1; i >= 0; i--) {
-					console.log("Tweet Number: " + inc);
+					console.log("Tweet Number: " + inc++);
 					console.log("==================================================");
-					console.log("@" + tweets[i].user.screen_name);
-					console.log(tweets[i].text);
+					console.log("Username: @" + tweets[i].user.screen_name);
+					app.wordWrap(75, tweets[i].text);
+					var twt = app.getForm();
+					console.log("Tweet: " + twt);
 					console.log("==================================================");
 					console.log(" ");
-					inc++;
 				}
 				app.logOutputs(tweets);
 			});
@@ -114,10 +116,11 @@ var app = {
 					console.log("Writers: " + JSON.parse(body).Writer);
 					console.log("Cast: " + JSON.parse(body).Actors);
 					console.log(" ");
-					console.log("Plot: " + JSON.parse(body).Plot);
+					app.wordWrap(75, JSON.parse(body).Plot);
+					var plot = app.getForm();
+					console.log("Plot: " + plot);
 					console.log(" ");
 					console.log("**********************Ratings!********************");
-					console.log(JSON.parse(body).Ratings.length)
 					if (JSON.parse(body).Ratings.length > 0) {
 						for (var i = 0; i < JSON.parse(body).Ratings.length; i++) {
 							console.log(JSON.parse(body).Ratings[i].Source);
@@ -178,6 +181,7 @@ var app = {
 			}
 			var endName = NameLong.toString().replace(/,/g, "+").toLowerCase();
 		}
+		//closure to get the formatted text back
 		this.getName = function() {
 			return endName;
 		}
@@ -230,10 +234,10 @@ var app = {
 				break;
 			case "reset":
 				reset();
-			break;
+				break;
 			case "info":
 				info();
-			break;
+				break;
 		}
 	},
 	//runs switch
@@ -268,7 +272,7 @@ var app = {
 				}
 			});
 	},
-	info: function(){
+	info: function() {
 		console.log("======================INFO========================")
 		console.log("The commands are:");
 		console.log(" ");
@@ -289,7 +293,39 @@ var app = {
 		console.log(" ");
 		console.log("test");
 		console.log("'test' will test your process.env keys");
-
+	},
+	//Wraps the text within my app so it looks nice
+	wordWrap: function(WRAP_SIZE, wordWrap) {
+		var format;
+		var word;
+		var line;
+		format = "";
+		line = "";
+		word = "";
+		for (var i = 0; i < wordWrap.length; i++) {
+			if (wordWrap[i] !== " ") {
+				word = word + wordWrap[i];
+			}
+			else {
+				if (line.length + word.length > WRAP_SIZE) {
+					format = format + line + '\n\t';
+					line = '';
+				}
+				line = line + word + " ";
+				word = '';
+			}
+		}
+		if (line.length + word.length < WRAP_SIZE) {
+			format = format + line + word;
+		}
+		else {
+			format = format + line + '\n' + word;
+		}
+		//closure to get the formatted text back
+		this.getForm = function() {
+			return format;
+		}
+		return format;
 	}
 }
 //runs the code
