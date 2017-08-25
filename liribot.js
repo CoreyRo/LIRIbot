@@ -140,16 +140,27 @@ var app = {
 	readTxt: function() {
 		var fs = require("fs");
 		var incr = 0;
+		var randomNum = 0;
 		fs.readFile("random.txt", "utf8", function(err, data) {
 			if (err) {
 				return console.log(err);
 			}
 			var output = data.split(";");
+			console.log(output)
 			for (var i = 0; i < output.length; i++) {
 				// console.log(output[i].replace(/\,/g, ' '))
 			}
 			//Gets a random pair in the random.txt, then reads it and puts it thru the switch
-			var randomNum = Math.floor(Math.random() * output.length);
+			if(output.length === 0){
+				return console.log("random.txt is empty!")
+			}
+			else if(output.length === 1){
+				randomNum = 0;
+			}
+			else{
+				randomNum = Math.floor(Math.random() * output.length);
+				
+			}
 			var picked = output[randomNum].trim();
 			var pickedArr = ["", ""];
 			var pickedSplit = picked.split(",")
@@ -165,6 +176,8 @@ var app = {
 			console.log(" ");
 			console.log(" ");
 			console.log(" ");
+
+			
 		});
 	},
 	//makes names out of argv array for music/movies
